@@ -1,6 +1,5 @@
 # Calculator
 
-First version of Calculator project.
-This is my firt project in JS.
+Second version of Calculator project.
+Here i tried to base Calucator on classes in JS.
 It is calculator buitl on vanilla JS and Less.
-I know it is not perfect by now, but i will do my best to make it better and better.
