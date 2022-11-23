@@ -7,37 +7,14 @@ let number1 = "";
 let number2 = "";
 let operation = "";
 let state = false;
+let info = "";
+let calculator;
 
-//   // Если нажата одна из операций необходимо начать набирать вторую переменную
-
-//   if (clickedBtn.classList.contains("btn-operation")) {
-//     if (number1 !== "" && state === true) {
-//       state = false;
-//       operation = clickedBtn.innerHTML;
-//       showContent(operation);
-//     } else {
-//       operation = clickedBtn.innerHTML;
-//       showContent(operation);
-//     }
-//   }
-// });
-
-// Функция очистки переменных и экрана
-function clearing() {
-  inputScreen.innerHTML = "0";
-  number1 = "0";
-  number2 = "";
-  operation = "";
-}
-
-class InputButton {
-  constructor(value) {
-    this.value = value;
-  }
-}
-
-class Screen {
-  constructor(info) {
+class Calculation {
+  constructor(number1, number2, operation, info) {
+    this.number1 = number1;
+    this.number2 = number2;
+    this.operation = operation;
     this.info = info;
   }
 
@@ -48,40 +25,44 @@ class Screen {
   clear() {
     inputScreen.innerHTML = "0";
   }
-}
 
-class Calculation {
-  constructor(number1, number2, operation, status) {
-    this.number1 = number1;
-    this.number2 = number2;
-    this.operation = operation;
-    this.status = status;
+  onLoadClearing() {
+    this.clear();
+    number1 = "0";
+    number2 = "";
+    operation = "";
   }
 
-  clr() {
+  onCalcClearing() {
+    this.show();
     state = true;
     number2 = "";
     operation = "";
   }
 
-  sum() {
-    return this.number1 + this.number2;
-  }
-  sub() {
-    return this.number1 - this.number2;
-  }
-  mult() {
-    return this.number1 * this.number2;
-  }
-  div() {
-    return this.number1 / this.number2;
-  }
-  exp() {
-    return this.number1 ** this.number2;
+  calculate(number1, number2, operation) {
+    switch (operation) {
+      case "+":
+        number1 = +(+this.number1 + +this.number2).toFixed(3);
+        return number1;
+      case "-":
+        number1 = +(+this.number1 - +this.number2).toFixed(3);
+        return number1;
+      case "*":
+        number1 = +(+this.number1 * +this.number2).toFixed(3);
+        return number1;
+      case "÷":
+        number1 = +(+this.number1 / +this.number2).toFixed(3);
+        return number1;
+      case "^":
+        number1 = +((+this.number1) ** +this.number2).toFixed(3);
+        return number1;
+    }
   }
 }
+calculator = new Calculation(number1, number2, operation, info);
 
-let calculator = new Calculation(4, 4);
+calculator.onLoadClearing();
 
 calcInput.addEventListener("click", (event) => {
   let clickedBtn = event.target;
@@ -100,18 +81,29 @@ calcInput.addEventListener("click", (event) => {
 
   if (clickedBtn.classList.contains("btn-result")) {
     if (number2 === "" && operation != "") {
-      number1 = calculator(number1, number1, operation);
+      number1 = calculator.calculate(number1, number1, operation);
       number1 > maxN
         ? (inputScreen.innerHTML = "too Much")
-        : calcState(number1);
+        : calculator.onCalcClearing();
     }
     if (number2 === "" && operation === "") {
-      calcState(number1);
+      console.log(number1);
     } else {
-      number1 = calculation(number1, number2, operation);
+      number1 = calculator.calculate(number1, number2, operation);
       number1 > maxN
         ? (inputScreen.innerHTML = "too Much")
-        : calcState(number1);
+        : calculator.onCalcClearing();
+    }
+  }
+
+  if (clickedBtn.classList.contains("btn-operation")) {
+    if (number1 !== "" && state === true) {
+      state = false;
+      operation = clickedBtn.innerHTML;
+      calculator.show(operation);
+    } else {
+      operation = clickedBtn.innerHTML;
+      calculator.show(operation);
     }
   }
 
@@ -119,20 +111,20 @@ calcInput.addEventListener("click", (event) => {
     if (state === false) {
       if (operation === "" && number2 === "" && number1 === "0") {
         number1 = clickedBtn.innerHTML;
-        showContent(number1);
+        inputScreen.innerHTML = number1;
         return;
       }
       if (operation === "" && number2 === "" && number1 != "0") {
         number1 = number1 + clickedBtn.innerHTML;
-        showContent(number1);
+        inputScreen.innerHTML = number1;
         return;
       } else {
         number2 = number2 + clickedBtn.innerHTML;
-        showContent(number2);
+        inputScreen.innerHTML = number2;
       }
     } else {
       number1 = clickedBtn.innerHTML;
-      showContent(number1);
+      inputScreen.innerHTML = number1;
       state = false;
     }
   }
