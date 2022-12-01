@@ -7,7 +7,6 @@ export class Calculator {
     this.number2 = options.number2;
     this.operation = options.operation;
     this.state = options.state;
-    this.maxN = options.maxN;
   }
 
   show(info) {

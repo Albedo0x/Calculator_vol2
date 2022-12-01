@@ -6,12 +6,12 @@ let calculator = new Calculator({
   number2: "",
   operation: "",
   state: false,
-  maxN: 999999999999,
 });
 
 calculator.onLoadClearing();
 
 document.getElementById("main-input").addEventListener("click", (event) => {
+  console.log(this);
   let clickedBtn = event.target;
 
   // Если нажал не на кнопку - ничего не делаем
@@ -45,29 +45,23 @@ document.getElementById("main-input").addEventListener("click", (event) => {
   if (clickedBtn.classList.contains("btn-result")) {
     if (calculator.number2 === "" && calculator.operation != "") {
       calculator.number1 = calculator.calculate(calculator.operation);
-      calculator.number1 > calculator.maxN
-        ? calculator.show("Too Much")
-        : calculator.onCalcClearing(calculator.number1);
     }
     if (calculator.number2 === "" && calculator.operation === "") {
-      calculator.onCalcClearing(calculator.number1);
+      return;
     } else {
       calculator.number1 = calculator.calculate(calculator.operation);
-      calculator.number1 > calculator.maxN
-        ? calculator.show("Too Much")
-        : calculator.onCalcClearing(calculator.number1);
     }
+    calculator.onCalcClearing(calculator.number1);
   }
   // Если нажал на знак операции "+,-,/,^,*" - выбрать операцию
   if (clickedBtn.classList.contains("btn-operation")) {
     if (calculator.number1 !== "" && calculator.state === true) {
       calculator.state = false;
-      calculator.operation = clickedBtn.innerHTML;
-      calculator.show(calculator.operation);
     } else {
-      calculator.operation = clickedBtn.innerHTML;
-      calculator.show(calculator.operation);
+      return;
     }
+    calculator.operation = clickedBtn.innerHTML;
+    calculator.show(calculator.operation);
   }
   // Если нажал на цифру - начать набирать число
   if (clickedBtn.classList.contains("btn-digit")) {
